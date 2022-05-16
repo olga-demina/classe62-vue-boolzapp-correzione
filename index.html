@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <title>Boolzapp</title>
+  </head>
+  <body>
+    <div id="root" class="container clearfix">
+      <!-- Left Sidebar -->
+      <div class="col left">
+        <!-- Header -->
+        <header class="col-header">
+          <div class="col-header__avatar">
+            <img src="img/avatar_io.jpg" alt="" />
+            <div class="col-header__text">
+              <h3>Sofia</h3>
+            </div>
+          </div>
+          <div class="col-header__actions">
+            <i class="fas fa-circle-notch"></i>
+            <i class="fas fa-circle-notch"></i>
+            <i class="fas fa-circle-notch"></i>
+          </div>
+        </header>
+        <!-- /Header -->
+
+        <!-- Disclaimer section -->
+        <section class="disclaimer"></section>
+        <!-- /Disclaimer section -->
+
+        <!-- Search section -->
+        <section class="search">
+          <div class="search__field">
+            <label for="search" class="search__icon">
+              <i class="fas fa-search"></i>
+            </label>
+            <input
+              class="search__input"
+              type="text"
+              id="search"
+              placeholder="Cerca o inizia una nuova chat"
+              @keyup="filter"
+              v-model="search"
+            />
+          </div>
+        </section>
+        <!-- /Search section -->
+
+        <!-- Contacts section -->
+        <section class="contacts">
+          <!-- Single contact -->
+
+          <template v-for="(element, index) in contacts">
+            <div
+              class="contact"
+              :class="{ 'contact--active': currentContact === index }"
+              @click="selectContact(index)"
+              v-if="element.visible"
+            >
+              <div class="contact__avatar">
+                <img
+                  :src="'img/avatar' + element.avatar + '.jpg'"
+                  :alt="element.name"
+                />
+              </div>
+              <div class="contact__text">
+                <div class="contact__main-text">
+                  <h3>{{ element.name }}</h3>
+                  <p>12:00</p>
+                </div>
+                <small>Ultimo messaggio inviato</small>
+              </div>
+            </div>
+          </template>
+          <!-- /Single contact -->
+        </section>
+        <!-- /Contacts section -->
+      </div>
+      <!-- /Left Sidebar -->
+
+      <!-- Right main -->
+      <div class="col right">
+        <!-- Header -->
+        <header class="col-header">
+          <div class="col-header__avatar">
+            <img
+              :src="'img/avatar' + currentContactObj.avatar + '.jpg'"
+              alt=""
+            />
+            <div class="col-header__text">
+              <h3>{{ currentContactObj.name }}</h3>
+              <small>Ultimo accesso oggi alle 12:00</small>
+            </div>
+          </div>
+          <div class="col-header__actions">
+            <i class="fas fa-circle-notch"></i>
+            <i class="fas fa-circle-notch"></i>
+            <i class="fas fa-circle-notch"></i>
+          </div>
+        </header>
+        <!-- /Header -->
+
+        <!-- Messages -->
+        <section class="messages-section">
+          <!-- Message item -->
+          <div
+            class="message"
+            :class="'message--' + item.status"
+            v-for="(item, index) in currentContactObj.messages"
+          >
+            <div class="message__box">
+              <div class="message__text">
+                <span> {{ item.message }} </span>
+                <i class="fas fa-chevron-down" @click="toggleMessageMenu(index)"></i>
+              </div>
+              <div class="message__time">{{ getTime(item.date) }}</div>
+
+              <div
+              class="message__actions"
+              v-if="activeMessage.messageIndex === index && activeMessage.visible" 
+              >
+                <ul>
+                  <li>Message info</li>
+                  <li>Delete message</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- /Message item -->
+
+          <!-- <div class="message message--received">
+              <div class="message__box">
+                <div class="message__text">Lorem ipsum dolor</div>
+                <div class="message__time">12:00</div>
+              </div>
+            </div> -->
+        </section>
+        <!-- /Messages -->
+
+        <footer class="new-message">
+          <div class="new-message__actions">
+            <i class="far fa-smile"></i>
+          </div>
+          <div class="new-message__input">
+            <input
+              @keyup.enter="sendMessage"
+              type="text"
+              placeholder="Scrivi un messaggio"
+              v-model="newMessage"
+            />
+          </div>
+          <div class="new-message__actions">
+            <i class="far fa-smile"></i>
+          </div>
+        </footer>
+      </div>
+      <!-- /Right main -->
+    </div>
+
+    <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.8.25/plugin/customParseFormat.js"></script>
+    <script src="js/script.js"></script>
+  </body>
+</html>

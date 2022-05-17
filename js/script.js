@@ -89,17 +89,17 @@ const app = new Vue({
       },
     ],
     currentContact: 0,
-    newMessage: '',
-    search: '',
+    newMessage: "",
+    search: "",
     activeMessage: {
       messageIndex: null,
-      visible: null
-    }
+      visible: null,
+    },
   },
   computed: {
     currentContactObj() {
       return this.contacts[this.currentContact];
-    }
+    },
   },
   methods: {
     selectContact(index) {
@@ -111,29 +111,24 @@ const app = new Vue({
       selectedContact.messages.push({
         date: this.getCurrentTime(),
         message: this.newMessage,
-        status: 'sent'
+        status: "sent",
       });
-      this.newMessage = '';
+      this.newMessage = "";
       setTimeout(this.receiveMessage, 1000);
     },
     receiveMessage() {
       const selectedContact = this.contacts[this.currentContact];
       selectedContact.messages.push({
         date: this.getCurrentTime(),
-        message: 'ok',
-        status: 'received'
+        message: "ok",
+        status: "received",
       });
     },
     getCurrentTime() {
-      return dayjs().format('DD/MM/YYYY HH:mm:ss');
-    },
-    getTime(date) {
-      const dayjsDate = dayjs(date, 'DD/MM/YYYY HH:mm:ss');
-      return dayjsDate.format('HH:mm');
+      return dayjs().format("DD/MM/YYYY HH:mm:ss");
     },
     filter() {
-      console.log('search');
-      this.contacts.forEach( contact => {
+      this.contacts.forEach((contact) => {
         const contactName = contact.name.toLowerCase();
         const searchName = this.search.toLowerCase();
         if (contactName.includes(searchName)) {
@@ -146,29 +141,41 @@ const app = new Vue({
     toggleMessageMenu(index) {
       // Se clicco su un messaggio, il menu viene visualizzato
       // Se clicco di nuovo sullo stesso messaggio si nasconde
-      // altrimenti se clicco su un'altro messaggio 
-        // Si nasconde dal messaggio presende e si visualizza nel messaggio cliccato
-        if (index === this.activeMessage.messageIndex) {
-          // caso click sullo stesso messaggio
-          this.activeMessage.visible = !this.activeMessage.visible;
-        } else {
-          //  clicco su un messaggio diverso
-          this.activeMessage.messageIndex = index;
-          this.activeMessage.visible = true;
-        }
+      // altrimenti se clicco su un'altro messaggio
+      // Si nasconde dal messaggio presende e si visualizza nel messaggio cliccato
+      if (index === this.activeMessage.messageIndex) {
+        // caso click sullo stesso messaggio
+        this.activeMessage.visible = !this.activeMessage.visible;
+      } else {
+        //  clicco su un messaggio diverso
+        this.activeMessage.messageIndex = index;
+        this.activeMessage.visible = true;
+      }
     },
     resetMessageMenu() {
       this.activeMessage.messageIndex = null;
       this.activeMessage.visible = null;
-    }
-  }
+    },
+    deleteMessage(index) {
+      const selectedContact = this.contacts[this.currentContact];
+      selectedContact.messages.splice(index, 1);
+      this.resetMessageMenu();
+    },
+    getLastMessage(contactIndex) {
+      const contactMessages = this.contacts[contactIndex].messages;
+      return contactMessages.length === 0
+        ? ""
+        : contactMessages[contactMessages.length - 1];
+    },
+    getTime(date) {
+      const dayjsDate = dayjs(date, "DD/MM/YYYY HH:mm:ss");
+      return dayjsDate.format("HH:mm");
+    },
+  },
 });
 
-
-const date = dayjs('28/03/2020 10:20:10', 'DD/MM/YYYY HH:mm:ss');
-console.log(date.format('HH:mm'));
+const date = dayjs("28/03/2020 10:20:10", "DD/MM/YYYY HH:mm:ss");
+console.log(date.format("HH:mm"));
 
 // const date = dayjs().format('DD-MM-YYYY');
 // console.log(date);
-
-

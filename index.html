@@ -80,9 +80,9 @@
               <div class="contact__text">
                 <div class="contact__main-text">
                   <h3>{{ element.name }}</h3>
-                  <p>12:00</p>
+                  <p>{{ getTime(getLastMessage(index).date) }}</p>
                 </div>
-                <small>Ultimo messaggio inviato</small>
+                <small>{{ getLastMessage(index).message }}</small>
               </div>
             </div>
           </template>
@@ -128,14 +128,15 @@
                 <i class="fas fa-chevron-down" @click="toggleMessageMenu(index)"></i>
               </div>
               <div class="message__time">{{ getTime(item.date) }}</div>
-
+              
+              <!-- Message submenu -->
               <div
               class="message__actions"
               v-if="activeMessage.messageIndex === index && activeMessage.visible" 
               >
                 <ul>
                   <li>Message info</li>
-                  <li>Delete message</li>
+                  <li @click="deleteMessage(index)">Delete message</li>
                 </ul>
               </div>
             </div>
